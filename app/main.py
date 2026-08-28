@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import AsyncIterator
@@ -17,18 +18,42 @@ from app.services.risk_service import RiskService
 from app.services.scheduler import MonitoringScheduler
 
 
+class _NoopScheduler:
+    def start(self) -> None:
+        return None
+
+    def shutdown(self) -> None:
+        return None
+
+    def sync(self) -> None:
+        return None
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     database = Database(DATABASE_PATH)
     database.initialise()
     risk_service = RiskService(database)
-    scheduler = MonitoringScheduler(database, risk_service)
+
+    disable_monitoring = os.getenv("DISABLE_MONITORING", "false").lower() in ("1", "true", "yes")
+    if disable_monitoring:
+        scheduler = _NoopScheduler()
+    else:
+        scheduler = MonitoringScheduler(database, risk_service)
+        scheduler.start()
+
     app.state.database = database
     app.state.risk_service = risk_service
     app.state.scheduler = scheduler
-    scheduler.start()
+
     yield
-    scheduler.shutdown()
+
+    # Shutdown scheduler if it exposes shutdown (noop scheduler also has it)
+    try:
+        scheduler.shutdown()
+    except Exception:
+        # ensure graceful shutdown even if scheduler wasn't fully started
+        pass
 
 
 app = FastAPI(
@@ -139,6 +164,7 @@ async def create_monitoring(payload: MonitoringRequest, request: Request) -> dic
     except DomainSafetyError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     record = database(request).upsert_monitoring(normalised, payload.revenue_band.value, payload.interval_minutes)
+    # scheduler may be a noop scheduler in serverless; sync() is safe either way
     request.app.state.scheduler.sync()
     return record
 
