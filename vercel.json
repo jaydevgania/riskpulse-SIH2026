@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "app/main.py", "use": "@vercel/python" },
+    { "src": "app/static/**", "use": "@vercel/static" }
+  ],
+  "functions": {
+    "app/main.py": { "runtime": "python3.11" }
+  },
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/app/main.py" },
+    { "src": "/assets/(.*)", "dest": "/app/static/$1" },
+    { "src": "/", "dest": "/app/static/index.html" },
+    { "src": "/(.*)", "dest": "/app/static/$1" }
+  ]
+}
