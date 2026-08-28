@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="RiskPulse turns passive external security signals into practical risk priorities." />
+    <title>RiskPulse · Continuous cyber risk clarity</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="side-rail">
+        <a class="brand" href="/" aria-label="RiskPulse home"><span class="mark">R</span><span>RiskPulse</span></a>
+        <p class="rail-kicker">CYBER RISK, MADE LEGIBLE</p>
+        <nav aria-label="Primary navigation">
+          <a class="nav-link active" href="#assessment">Assessment</a>
+          <a class="nav-link" href="#priorities">Priorities</a>
+          <a class="nav-link" href="#history">Posture history</a>
+          <a class="nav-link" href="#integrity">Audit integrity</a>
+        </nav>
+        <div class="rail-note">
+          <span class="pulse-dot"></span>
+          Passive signals only<br /><small>Authorised domains</small>
+        </div>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div><span class="eyebrow">INDIA-NATIVE RISK INTELLIGENCE</span><h1>Know what to fix before it costs you.</h1></div>
+          <span class="live-badge"><i></i> System ready</span>
+        </header>
+
+        <section id="assessment" class="scan-section">
+          <div class="scan-copy">
+            <p class="section-label">EXTERNAL POSTURE ASSESSMENT</p>
+            <h2>One domain. A defensible starting point.</h2>
+            <p>RiskPulse reads public DNS, TLS, certificate and HTTPS metadata—then translates the result into a transparent exposure estimate and action plan.</p>
+          </div>
+          <form id="scan-form" class="scan-form">
+            <label class="field grow"><span>Company domain</span><input id="domain" name="domain" type="text" placeholder="yourcompany.in" autocomplete="url" required /></label>
+            <label class="field"><span>Annual revenue</span><select id="revenue" name="revenue_band"><option value="under_1cr">Under ₹1 crore</option><option value="1cr_to_10cr" selected>₹1–10 crore</option><option value="10cr_to_50cr">₹10–50 crore</option><option value="50cr_to_250cr">₹50–250 crore</option><option value="over_250cr">Over ₹250 crore</option></select></label>
+            <label class="field budget-field"><span>Action budget</span><input id="budget" type="number" min="1000" max="10000000" value="50000" step="1000" inputmode="numeric" /></label>
+            <label class="consent"><input id="authorised" type="checkbox" required /><span>I own or am authorised to assess this domain.</span></label>
+            <button id="scan-button" class="primary-button" type="submit"><span>Assess risk</span><span class="arrow">→</span></button>
+          </form>
+          <p class="microcopy">No port scanning. No authentication. No exploitation. Results are an external, passive snapshot—not a legal opinion or penetration test.</p>
+          <p id="error-message" class="error-message" role="alert" hidden></p>
+        </section>
+
+        <section id="empty-state" class="empty-state">
+          <span class="empty-glyph">◌</span>
+          <div><h2>Start with the surface you can see.</h2><p>Run an authorised scan to create your first risk snapshot and tamper-evident audit record.</p></div>
+        </section>
+
+        <section id="results" hidden aria-live="polite">
+          <div class="result-heading">
+            <div><p class="section-label">LATEST SNAPSHOT</p><h2 id="result-domain">—</h2><p id="result-time" class="muted">—</p></div>
+            <div class="result-actions"><button id="monitor-button" class="secondary-button">Enable 60-min monitoring</button><span id="coverage-chip" class="coverage-chip">—</span></div>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric-card score-card"><span class="metric-label">External posture</span><strong id="score-value">—</strong><span class="metric-caption">out of 100</span><div class="score-track"><i id="score-bar"></i></div></article>
+            <article class="metric-card exposure-card"><span class="metric-label">Modelled annual exposure</span><strong id="ale-value">—</strong><span id="likelihood-value" class="metric-caption">—</span><span class="model-pill">PLANNING ESTIMATE</span></article>
+            <article class="metric-card reduction-card"><span class="metric-label">Potential exposure reduction</span><strong id="reduction-value">—</strong><span id="roi-value" class="metric-caption">—</span><span class="model-pill">WITH SELECTED CONTROLS</span></article>
+            <article class="metric-card readiness-card"><span class="metric-label">Breach-readiness lens</span><strong>6h <em>/</em> 72h</strong><span class="metric-caption">CERT-In / DPB planning clocks</span><span class="model-pill">EXTERNAL PROXY</span></article>
+          </div>
+
+          <div class="split-grid first-split">
+            <article class="panel board-panel"><div class="panel-top"><div><p class="section-label">BOARD BRIEF</p><h3>What this means</h3></div><span id="report-source" class="source-badge">—</span></div><p id="board-report" class="report-text">—</p><p id="report-notice" class="panel-note">—</p></article>
+            <article id="history" class="panel trend-panel"><div class="panel-top"><div><p class="section-label">CONTINUOUS POSTURE</p><h3>Score history</h3></div><span id="trend-status" class="muted">First snapshot</span></div><div id="trend-chart" class="trend-chart" aria-label="Posture score trend"></div></article>
+          </div>
+
+          <div class="split-grid detail-split">
+            <article id="priorities" class="panel findings-panel"><div class="panel-top"><div><p class="section-label">RISK PRIORITIES</p><h3>Observed external signals</h3></div><span id="finding-count" class="count-badge">—</span></div><div id="findings-list" class="findings-list"></div><p id="methodology" class="panel-note"></p></article>
+            <article class="panel controls-panel"><div class="panel-top"><div><p class="section-label">INVESTMENT OPTIMISER</p><h3>Put the budget to work</h3></div><span id="budget-caption" class="count-badge">—</span></div><p id="optimisation-summary" class="optimisation-summary"></p><div id="controls-list" class="controls-list"></div><p class="panel-note">Portfolio results use non-additive risk reduction; prices are indicative planning inputs.</p></article>
+          </div>
+
+          <div class="split-grid bottom-split">
+            <article class="panel regulation-panel"><p class="section-label">REGULATION MAPPING</p><h3>Operational readiness, not legal certainty.</h3><div class="clock-list"><div><span>01</span><p><strong>6 hours</strong> CERT-In incident reporting is a rapid-response operational clock.</p></div><div><span>02</span><p><strong>72 hours</strong> DPB notification is shown as a separate planning clock.</p></div></div><p class="panel-note">Passive signals cannot prove internal logging, response or legal compliance. Confirm current obligations with qualified counsel.</p></article>
+            <article id="integrity" class="panel ledger-panel"><div class="panel-top"><div><p class="section-label">TAMPER-EVIDENT HISTORY</p><h3>Audit-chain verification</h3></div><span id="ledger-badge" class="ledger-badge">Checking…</span></div><div class="hash-row"><span>Latest report hash</span><code id="report-hash">—</code></div><p id="ledger-copy" class="panel-note">Each stored report includes the prior report hash, creating a locally verifiable integrity chain.</p></article>
+          </div>
+        </section>
+
+        <footer>RiskPulse 1.0 · Built for risk prioritisation, not surveillance. <a href="/docs" target="_blank" rel="noopener">View API docs</a></footer>
+      </main>
+    </div>
+    <script src="/assets/app.js" defer></script>
+  </body>
+</html>
